@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Epic History of Computing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #060911;
+            --bg-card: #131b2e;
+            --bg-card-hover: #1c2742;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 242, 254, 0.25);
+            --nav-bg: rgba(11, 15, 25, 0.85);
+            --pill-bg: rgba(255, 255, 255, 0.04);
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --modal-bg: #131b2e;
+            
+            --accent-cyan: #00f2fe;
+            --accent-purple: #9d4edd;
+            --accent-pink: #ff007f;
+            --accent-amber: #ffb703;
+            --accent-emerald: #06d6a0;
+
+            --hero-gradient: linear-gradient(135deg, #ffffff 30%, #00f2fe 70%, #ff007f 100%);
+            --card-gradient: linear-gradient(145deg, #131b2e, #162035);
+            --quiz-gradient: linear-gradient(135deg, #131b2e 0%, #161e38 100%);
+            --input-bg: rgba(0, 0, 0, 0.35);
+            --code-output-bg: #060911;
+            --tag-purple-bg: rgba(121, 40, 202, 0.25);
+            --tag-purple-border: rgba(121, 40, 202, 0.5);
+            --tag-purple-text: #d8b4fe;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-glow: rgba(2, 132, 199, 0.3);
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --pill-bg: rgba(0, 0, 0, 0.04);
+            --modal-overlay: rgba(15, 23, 42, 0.6);
+            --modal-bg: #ffffff;
+            
+            --accent-cyan: #0284c7;
+            --accent-purple: #7c3aed;
+            --accent-pink: #d91b5c;
+            --accent-amber: #b45309;
+            --accent-emerald: #047857;
+
+            --hero-gradient: linear-gradient(135deg, #0f172a 30%, #0284c7 70%, #d91b5c 100%);
+            --card-gradient: linear-gradient(145deg, #ffffff, #f8fafc);
+            --quiz-gradient: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            --input-bg: #f1f5f9;
+            --code-output-bg: #0f172a;
+            --tag-purple-bg: rgba(124, 58, 237, 0.12);
+            --tag-purple-border: rgba(124, 58, 237, 0.3);
+            --tag-purple-text: #6d28d9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: var(--theme-transition);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(121, 40, 202, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.1) 0%, transparent 40%);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(16px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .theme-toggle-btn {
+            background: var(--pill-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            user-select: none;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .score-pill {
+            background: rgba(255, 183, 3, 0.15);
+            border: 1px solid var(--accent-amber);
+            color: var(--accent-amber);
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .hero {
+            padding: 4.5rem 2rem 2.5rem;
+            text-align: center;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .badge-tag {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid var(--border-glow);
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            background: var(--hero-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            font-family: 'Fredoka', cursive;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        section {
+            padding: 3.5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+            color: var(--text-main);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+        }
+
+        .core-box {
+            background: var(--card-gradient);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.75rem;
+        }
+
+        .trait-pill {
+            background: var(--pill-bg);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1.2rem;
+            border-radius: var(--radius-sm);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .trait-pill strong {
+            display: block;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .trait-pill span {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .period-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.75rem;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.7rem 1.3rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--accent-cyan);
+            color: #ffffff;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+        }
+
+        .period-display {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.25rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.2rem;
+            border-radius: 999px;
+            color: var(--text-main);
+            font-family: inherit;
+            min-width: 280px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--border-glow);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transform: translateZ(0);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 12px 28px var(--border-glow);
+        }
+
+        .tool-card.claimed {
+            border-color: rgba(6, 214, 160, 0.4);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        .year-tag {
+            background: var(--tag-purple-bg);
+            color: var(--tag-purple-text);
+            border: 1px solid var(--tag-purple-border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .tool-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.35rem;
+            color: var(--text-main);
+        }
+
+        .inventor-name {
+            color: var(--accent-amber);
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .inspect-badge {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .inspect-badge.active {
+            color: var(--accent-cyan);
+        }
+
+        .inspect-badge.claimed {
+            color: var(--accent-emerald);
+        }
+
+        /* Expanded Modal Overlay System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--modal-bg);
+            border: 2px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            max-width: 680px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            transform: scale(0.85) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: var(--pill-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--accent-pink);
+            color: #fff;
+            border-color: var(--accent-pink);
+        }
+
+        .modal-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .modal-detail-item {
+            background: var(--pill-bg);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .modal-detail-item strong {
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .modal-detail-item span {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .generation-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+        }
+
+        .gen-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .gen-box:hover {
+            border-color: var(--accent-pink);
+            background: var(--bg-card-hover);
+        }
+
+        .gen-num {
+            font-family: 'Fredoka', cursive;
+            font-size: 2rem;
+            color: var(--accent-pink);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .lab-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .lab-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.4rem;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lab-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 1rem 0;
+        }
+
+        .lab-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .lab-output {
+            background: var(--code-output-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f2fe;
+            min-height: 52px;
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+        }
+
+        [data-theme="light"] .lab-output {
+            color: #38bdf8;
+        }
+
+        .quiz-container {
+            background: var(--quiz-gradient);
+            border: 2px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            max-width: 750px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-progress {
+            height: 8px;
+            background: var(--pill-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 1.75rem;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-option {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: var(--pill-bg);
+            border-color: var(--accent-cyan);
+        }
+
+        .quiz-option.correct {
+            background: rgba(6, 214, 160, 0.2) !important;
+            border-color: var(--accent-emerald) !important;
+            color: var(--accent-emerald) !important;
+            font-weight: 700;
+        }
+
+        .quiz-option.wrong {
+            background: rgba(255, 0, 127, 0.15) !important;
+            border-color: var(--accent-pink) !important;
+            color: var(--accent-pink) !important;
+            font-weight: 700;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-cyan), #00a8ff);
+            color: #ffffff;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px var(--border-glow);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--bg-card);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">
+            IT100
+        </a>
+        <ul class="nav-links">
+            <li><a href="#definition">What's a Computer?</a></li>
+            <li><a href="#ages">The 4 Eras</a></li>
+            <li><a href="#tools">Inventions Gallery</a></li>
+            <li><a href="#generations">5 Generations</a></li>
+            <li><a href="#labs">Decoder Labs</a></li>
+            <li><a href="#quiz">Challenge Quiz</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle Color Theme">
+                <span id="themeIcon">☀️</span>
+                <span id="themeLabel">Light Mode</span>
+            </button>
+            <div class="score-pill" id="xp-counter">⭐ 0 XP</div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="badge-tag">Living in the IT Era • UNP CCIT Courseware</div>
+        <h1>The Epic Evolution of Computing Machinery</h1>
+        <p>From notched bones and mechanical gears to microchips and Artificial Intelligence—explore the 5,000-year journey of digital innovation.</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>3000 B.C.</h3>
+                <p>Origin of Computation</p>
+            </div>
+            <div class="stat-card">
+                <h3>1613</h3>
+                <p>First Use of "Computer"</p>
+            </div>
+            <div class="stat-card">
+                <h3>4 Eras</h3>
+                <p>Technological Ages</p>
+            </div>
+            <div class="stat-card">
+                <h3>5 Gens</h3>
+                <p>Modern Computer Eras</p>
+            </div>
+        </div>
+    </header>
+
+    <section id="definition">
+        <div class="core-box">
+            <div class="badge-tag" style="color:var(--accent-amber); border-color:var(--accent-amber);">Core Fundamentals</div>
+            <h2 style="font-size: 2rem; margin-bottom: 0.8rem; color: var(--text-main);">What Actually is a Computer?</h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem;">
+                A computer is a programmable electronic device that manipulates data according to a list of instructions (a program). It possesses the inherent ability to <strong>store, retrieve, and process</strong> massive information .
+            </p>
+            
+            <div class="traits-grid">
+                <div class="trait-pill">
+                    <strong>1. Well-Defined Responses</strong>
+                    <span>Responds to specific instructions in a strictly deterministic manner .</span>
+                </div>
+                <div class="trait-pill">
+                    <strong>2. Pre-Recorded Programs</strong>
+                    <span>Executes entire sequences of pre-recorded instructions automatically .</span>
+                </div>
+                <div class="trait-pill">
+                    <strong>3. Ultra-Fast Retrieval</strong>
+                    <span>Quickly stores and retrieves large amounts of operational data .</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: var(--pill-bg); border-radius: 12px; border: 1px dashed var(--accent-cyan); color: var(--text-main);">
+                💡 <strong>Historical Fact:</strong> The word "computer" was first recorded in 1613 by Richard Braithwait to describe <em>people</em> whose actual profession was calculating mathematical tables !
+            </div>
+        </div>
+    </section>
+
+    <section id="ages">
+        <div class="section-header">
+            <div class="badge-tag">Timeline Architecture</div>
+            <h2>The 4 Basic Computing Periods</h2>
+            <p>Explore each transformative epoch of human information technology.</p>
+        </div>
+
+        <div class="period-tabs">
+            <button class="tab-btn active" onclick="switchAge(0)">1. Premechanical (3000 B.C. - 1450 A.D.)</button>
+            <button class="tab-btn" onclick="switchAge(1)">2. Mechanical (1450 - 1840)</button>
+            <button class="tab-btn" onclick="switchAge(2)">3. Electromechanical (1840 - 1940)</button>
+            <button class="tab-btn" onclick="switchAge(3)">4. Electronic (1940 - Present)</button>
+        </div>
+
+        <div class="period-display" id="age-content">
+        </div>
+    </section>
+
+    <section id="tools">
+        <div class="section-header">
+            <div class="badge-tag">Virtual Artifact Museum</div>
+            <h2>Pioneering Computing Machines & Inventors</h2>
+            <p>Click any card to expand and inspect detailed historical blueprints! (+10 XP first inspect)</p>
+        </div>
+
+        <div class="filter-container">
+            <input type="text" class="search-box" id="searchBar" placeholder="🔍 Search machine, inventor, or year..." onkeyup="filterTools()">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <button class="tab-btn active" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="filterCategory('all', this)">All</button>
+                <button class="tab-btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="filterCategory('Ancient/Manual', this)">Manual/Early</button>
+                <button class="tab-btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="filterCategory('Mechanical', this)">Mechanical</button>
+                <button class="tab-btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="filterCategory('Electromechanical', this)">Electro-Mech</button>
+                <button class="tab-btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="filterCategory('Electronic', this)">Electronic</button>
+            </div>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid">
+        </div>
+    </section>
+
+    <section id="generations">
+        <div class="section-header">
+            <div class="badge-tag">Hardware Evolution</div>
+            <h2>The 5 Generations of Electronic Computers</h2>
+            <p>From massive vacuum tube chambers to microscopic silicon wafer architecture.</p>
+        </div>
+
+        <div class="generation-cards">
+            <div class="gen-box">
+                <div class="gen-num">1st</div>
+                <strong style="color:var(--text-main);">1946 – 1958</strong>
+                <h4 style="color:var(--accent-cyan); margin: 0.4rem 0;">Vacuum Tubes</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Magnetic drums for memory, machine language, room-sized footprint .<br><em>Examples: ENIAC, EDVAC, UNIVAC I & II .</em></p>
+            </div>
+            <div class="gen-box">
+                <div class="gen-num">2nd</div>
+                <strong style="color:var(--text-main);">1959 – 1963</strong>
+                <h4 style="color:var(--accent-emerald); margin: 0.4rem 0;">Transistors</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Replaced vacuum tubes; faster, smaller, symbolic assembly languages, punch cards .<br><em>Examples: UNIVAC III, RCA 501 .</em></p>
+            </div>
+            <div class="gen-box">
+                <div class="gen-num">3rd</div>
+                <strong style="color:var(--text-main);">1965 – 1970</strong>
+                <h4 style="color:var(--accent-amber); margin: 0.4rem 0;">Integrated Circuits</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Many transistors on a single chip . Nanosecond calculations, keyboards, and monitors introduced .</p>
+            </div>
+            <div class="gen-box">
+                <div class="gen-num">4th</div>
+                <strong style="color:var(--text-main);">1971 – Present</strong>
+                <h4 style="color:var(--accent-purple); margin: 0.4rem 0;">Microprocessors</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Thousands of transistors per chip; introduced graphical user interfaces (GUIs), mouse, and laptops .</p>
+            </div>
+            <div class="gen-box">
+                <div class="gen-num">5th</div>
+                <strong style="color:var(--text-main);">Today – Future</strong>
+                <h4 style="color:var(--accent-pink); margin: 0.4rem 0;">Artificial Intelligence</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Parallel processing and superconductors powering AI, neural networks, and voice recognition .</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="labs">
+        <div class="section-header">
+            <div class="badge-tag">Interactive Workshop</div>
+            <h2>Student Code & Logic Translators</h2>
+            <p>Try early telecommunication telegraph encodings and binary logic translators in real-time.</p>
+        </div>
+
+        <div class="labs-grid">
+            <div class="lab-card">
+                <h3>📻 1835 Morse Code Encoder</h3>
+                <p style="font-size:0.88rem; color:var(--text-muted);">Simulate Samuel Morse's dot-dash telecommunication telegraph system .</p>
+                <input type="text" class="lab-input" id="morseInput" placeholder="Type text here (e.g. COMPUTER)..." oninput="encodeMorse()">
+                <div class="lab-output" id="morseOutput">-.-. --- -- .--. ..- - . .-.</div>
+            </div>
+
+            <div class="lab-card">
+                <h3>💾 ABC 1939 Binary Encoder</h3>
+                <p style="font-size:0.88rem; color:var(--text-muted);">Translate text into binary (0s & 1s) pioneered by Atanasoff and Berry .</p>
+                <input type="text" class="lab-input" id="binaryInput" placeholder="Type letters to convert to binary..." oninput="encodeBinary()">
+                <div class="lab-output" id="binaryOutput">01000011 01001111 01001101 01010000</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz">
+        <div class="quiz-container">
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="quizProgressBar"></div>
+            </div>
+            
+            <div id="quizContent">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <span class="badge-tag" id="questionNum">Question 1 of 5</span>
+                    <span style="color:var(--accent-amber); font-weight:700;" id="quizStreak">Streak: 0 🔥</span>
+                </div>
+                <h3 id="quizQuestion" style="font-size:1.3rem; margin-bottom:1.5rem; color:var(--text-main);">Question text goes here?</h3>
+                <div id="quizOptions"></div>
+                <div id="quizFeedback" style="margin-top:1rem; font-weight:600; min-height:24px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expanded Artifact Inspector Modal -->
+    <div class="modal-overlay" id="inspectorModal" onclick="closeModalOnBackdrop(event)">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeInspector()">✕</button>
+            <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.75rem;">
+                <span class="badge-tag" id="modalCategory" style="margin-bottom:0;">Category</span>
+                <span class="year-tag" id="modalYear">Year</span>
+            </div>
+            <h2 id="modalTitle" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 0.25rem;">Tool Name</h2>
+            <p id="modalInventor" style="color: var(--accent-amber); font-weight: 700; font-size: 1rem; margin-bottom: 1.25rem;">👤 Inventor Name</p>
+            
+            <p id="modalDescription" style="color: var(--text-main); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Detailed description of the computing milestone.
+            </p>
+
+            <div class="modal-details-grid">
+                <div class="modal-detail-item">
+                    <strong>Computing Era</strong>
+                    <span id="modalEra">Mechanical Age</span>
+                </div>
+                <div class="modal-detail-item">
+                    <strong>Primary Operation</strong>
+                    <span id="modalOperation">Calculation & Automation</span>
+                </div>
+                <div class="modal-detail-item">
+                    <strong>Discovery Status</strong>
+                    <span id="modalStatus" style="color:var(--accent-emerald)">Unlocked ✨ (+10 XP)</span>
+                </div>
+            </div>
+
+            <div style="background: var(--pill-bg); padding: 1rem; border-radius: var(--radius-sm); border: 1px dashed var(--accent-cyan); margin-top: 1rem;">
+                <span style="font-weight: 700; color: var(--accent-cyan); display: block; margin-bottom: 0.2rem;">🌟 Historical Significance:</span>
+                <span id="modalSignificance" style="font-size: 0.92rem; color: var(--text-muted);">Significance information goes here.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Interactive IT100 Living in the IT Era Study Platform • University of Northern Philippines (UNP)</p>
+        <p style="font-size:0.82rem; margin-top:0.5rem; color:var(--text-muted);">Designed for interactive student mastery and historical computing foundations.</p>
+    </footer>
+
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('retrobyte_theme') || 'dark';
+            applyTheme(savedTheme);
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('retrobyte_theme', theme);
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            if (theme === 'light') {
+                icon.textContent = '🌙';
+                label.textContent = 'Dark Mode';
+            } else {
+                icon.textContent = '☀️';
+                label.textContent = 'Light Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        }
+
+        const erasData = [
+            {
+                title: "Premechanical Age",
+                time: "3000 B.C. – 1450 A.D.",
+                summary: "The earliest age of information technology. Humans used petroglyphs (rock carvings) and early language to record data .",
+                milestones: [
+                    "Petroglyphs carved into rock surfaces to document stories and numbers .",
+                    "100 A.D. – The first 1 to 9 numerical system was developed in India .",
+                    "875 A.D. – The invention of the number zero (0) .",
+                    "Creation of numbering systems birthed the first sign of information processors—the calculator concept ."
+                ]
+            },
+            {
+                title: "Mechanical Age",
+                time: "1450 – 1840",
+                summary: "The era where connections between modern computing and its ancestors first emerged through gears, dials, and levers .",
+                milestones: [
+                    "William Oughtred invented the Slide Rule in 1622 based on logarithms .",
+                    "Blaise Pascal built the gear-driven Pascaline in 1642 for addition and subtraction .",
+                    "Charles Babbage designed the Difference Engine (1822) and Analytical Engine (1834) .",
+                    "Established modern computing concepts including automation, programmability, and calculation ."
+                ]
+            },
+            {
+                title: "Electromechanical Age",
+                time: "1840 – 1940",
+                summary: "The dawn of telecommunications and massive electro-mechanical data tabulators using electrical circuits and relays .",
+                milestones: [
+                    "Telegraph (1800s) and Morse Code developed by Samuel Morse (1835) .",
+                    "Alexander Graham Bell patented the telephone in 1867 .",
+                    "Guglielmo Marconi transmitted the first radio signals in 1894 .",
+                    "Harvard Mark I (1944) built by Howard Aiken and IBM—a 51-foot long electro-mechanical computing giant ."
+                ]
+            },
+            {
+                title: "Electronic Age",
+                time: "1940 – Present",
+                summary: "The modern era characterized by vacuum tubes, semiconductors, microprocessors, and high-speed digital computing .",
+                milestones: [
+                    "ENIAC (1946) became the first high-speed general-purpose digital computer .",
+                    "UNIVAC I (1951) launched commercial and government electronic data processing .",
+                    "Invention of Integrated Circuits and Microprocessors that miniaturized computing power .",
+                    "Rise of Artificial Intelligence, parallel processing, and global computing networks ."
+                ]
+            }
+        ];
+
+        const toolsDatabase = [
+            { 
+                name: "Tally Stick", 
+                year: "Ancient", 
+                inventor: "Early Humans", 
+                category: "Ancient/Manual", 
+                era: "Premechanical Age",
+                operation: "Recording Quantities & Debts",
+                desc: "A piece of wood or bone with carved notches used to record numbers, debts, and quantities .",
+                significance: "One of mankind's oldest memory aid devices before written languages were codified ."
+            },
+            { 
+                name: "Abacus", 
+                year: "2400 B.C. / 500 B.C.", 
+                inventor: "Babylonians / Chinese", 
+                category: "Ancient/Manual", 
+                era: "Premechanical Age",
+                operation: "Arithmetic Operations (+, -, *, /)",
+                desc: "A bead-frame calculation device used for basic arithmetic operations (+, -, *, /) .",
+                significance: "Invented in Babylonia (2400 BC) and refined by the Chinese (500 BC), enabling rapid manual calculations ."
+            },
+            { 
+                name: "Napier's Bones", 
+                year: "1614", 
+                inventor: "John Napier", 
+                category: "Ancient/Manual", 
+                era: "Mechanical Age",
+                operation: "Multiplication & Division via Logarithms",
+                desc: "Numbered rods designed to simplify multiplication, division, and square roots using logarithms .",
+                significance: "Replaced tedious long manual arithmetic with physical sliding wooden rods ."
+            },
+            { 
+                name: "Slide Rule", 
+                year: "1622", 
+                inventor: "William Oughtred", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Multiplication, Division, Trig & Roots",
+                desc: "Logarithmic calculation ruler used for multiplication, division, and trigonometry (not addition/subtraction) .",
+                significance: "Became the universal calculation instrument for engineers and scientists for over 300 years ."
+            },
+            { 
+                name: "Pascaline", 
+                year: "1642", 
+                inventor: "Blaise Pascal", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Addition and Subtraction",
+                desc: "Mechanical calculator with interlocking gears; could only add and subtract; very expensive to craft .",
+                significance: "First operational mechanical gear calculator built by French philosopher Blaise Pascal ."
+            },
+            { 
+                name: "Stepped Reckoner", 
+                year: "1672", 
+                inventor: "Gottfried Wilhelm Leibniz", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Automated 4 Basic Arithmetic Operations",
+                desc: "Fluted gear calculator that automatically performed addition, subtraction, multiplication, and division .",
+                significance: "Introduced the stepped drum gear mechanism, allowing full automatic four-function math ."
+            },
+            { 
+                name: "Jacquard Loom", 
+                year: "1801", 
+                inventor: "Joseph-Marie Jacquard", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Punched Card Automation",
+                desc: "Weaving loom controlled by punched cards; pioneer of program-controlled automation .",
+                significance: "Demonstrated that binary punched hole sequences could instruct machines to execute complex routines ."
+            },
+            { 
+                name: "Arithmometer", 
+                year: "1820", 
+                inventor: "Thomas de Colmar", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Commercial 4-Function Math",
+                desc: "First commercially successful, reliable, and mass-produced 4-function mechanical calculator .",
+                significance: "Pioneered the commercial calculator industry, proving machines could be sold widely for business accounting ."
+            },
+            { 
+                name: "Difference Engine", 
+                year: "1822", 
+                inventor: "Charles Babbage", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Tabulating Polynomial Functions",
+                desc: "Automatic mechanical calculator designed to accurately tabulate polynomial functions and math tables .",
+                significance: "Babbage conceived this steam-powered machine to eliminate human errors in mathematical and navigation tables ."
+            },
+            { 
+                name: "Analytical Engine", 
+                year: "1834", 
+                inventor: "Charles Babbage", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "General-Purpose Mechanical Computation",
+                desc: "First design for a general-purpose, program-controlled mechanical digital computer .",
+                significance: "Incorporated an arithmetic logic unit (the mill), memory (the store), and punch card control—the blueprint of modern computing ."
+            },
+            { 
+                name: "First Computer Program", 
+                year: "1840", 
+                inventor: "Ada Lovelace", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Algorithm Design & Code Execution",
+                desc: "Augusta Ada King-Noel wrote the world's first algorithm designed for Babbage's Analytical Engine .",
+                significance: "Earned Ada Lovelace the historic title of the world's first computer programmer ."
+            },
+            { 
+                name: "Scheutzian Engine", 
+                year: "1843", 
+                inventor: "Per Georg Scheutz", 
+                category: "Mechanical", 
+                era: "Mechanical Age",
+                operation: "Automatic Difference Table Calculation",
+                desc: "First practical, working automatic calculator based on Charles Babbage's difference engine concepts .",
+                significance: "Successfully built and printed mathematical tables based on Babbage's theoretical designs ."
+            },
+            { 
+                name: "Tabulating Machine", 
+                year: "1890", 
+                inventor: "Herman Hollerith", 
+                category: "Electromechanical", 
+                era: "Electromechanical Age",
+                operation: "Punched Card Data Summarization",
+                desc: "Punched-card tabulator created to summarize the US census and business accounting data .",
+                significance: "Processed the US Census in months instead of years; Hollerith's firm later merged to form IBM ."
+            },
+            { 
+                name: "Z1 Computer", 
+                year: "1936-1938", 
+                inventor: "Konrad Zuse", 
+                category: "Electromechanical", 
+                era: "Electromechanical Age",
+                operation: "Freely Programmable Punched Tape",
+                desc: "World's first freely programmable computer; read instructions from punched tape .",
+                significance: "Constructed in Zuse's parents' living room in Germany using thin metal plates and binary logic ."
+            },
+            { 
+                name: "ABC Computer", 
+                year: "1939-1942", 
+                inventor: "John Atanasoff & Clifford Berry", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "Electronic Digital Binary Computation",
+                desc: "First electronic digital computing device; pioneered binary (0s & 1s) processing .",
+                significance: "Introduced regenerative capacitor memory and electronic vacuum tube logic ."
+            },
+            { 
+                name: "Harvard Mark I", 
+                year: "1944", 
+                inventor: "Howard Aiken & IBM", 
+                category: "Electromechanical", 
+                era: "Electromechanical Age",
+                operation: "Large-Scale Automatic Sequencing",
+                desc: "IBM ASCC; 51 feet long, 5 tons; first large-scale automatic digital computer in the US .",
+                significance: "Computed military ballistic trajectories and calculations for the Manhattan Project ."
+            },
+            { 
+                name: "ENIAC", 
+                year: "1946", 
+                inventor: "J. Presper Eckert & John Mauchly", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "General-Purpose High-Speed Computation",
+                desc: "First high-speed electronic general-purpose computer; utilized over 18,000 vacuum tubes .",
+                significance: "Calculated artillery firing tables thousands of times faster than human computers ."
+            },
+            { 
+                name: "Electronic Controls Co.", 
+                year: "1949", 
+                inventor: "Eckert & Mauchly", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "Commercial Computer Manufacturing",
+                desc: "The very first commercial computer company founded in history .",
+                significance: "Marked the birth of the commercial computing industry and commercial mainframe sales ."
+            },
+            { 
+                name: "UNIVAC 1", 
+                year: "1951", 
+                inventor: "Eckert & Mauchly", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "Business & Governmental Data Processing",
+                desc: "First mass-produced commercial computer sold to businesses and the US Census Bureau .",
+                significance: "Became famous for correctly predicting the 1952 US Presidential election outcome on live television ."
+            },
+            { 
+                name: "EDVAC", 
+                year: "1952", 
+                inventor: "John Von Neumann", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "Stored-Program Memory Architecture",
+                desc: "First stored-program computer designed with internal memory for both data and instructions .",
+                significance: "Standardized the 'Von Neumann Architecture' used by virtually every modern computer today ."
+            },
+            { 
+                name: "Osborne 1", 
+                year: "1981", 
+                inventor: "Adam Osborne", 
+                category: "Electronic", 
+                era: "Electronic Age",
+                operation: "Portable Microcomputer Computing",
+                desc: "First commercial portable personal computer with a self-contained monitor and disk drives .",
+                significance: "Weighed 24.5 lbs and opened the path toward modern laptop and mobile computing ."
+            }
+        ];
+
+        const inspectedTools = new Set();
+        let studentXP = 0;
+
+        function awardXP(pts) {
+            studentXP += pts;
+            document.getElementById('xp-counter').innerText = `⭐ ${studentXP} XP`;
+        }
+
+        function openInspector(toolName) {
+            const tool = toolsDatabase.find(t => t.name === toolName);
+            if (!tool) return;
+
+            const isFirstInspection = !inspectedTools.has(tool.name);
+            if (isFirstInspection) {
+                inspectedTools.add(tool.name);
+                awardXP(10);
+                renderTools(toolsDatabase);
+            }
+
+            document.getElementById('modalTitle').innerText = tool.name;
+            document.getElementById('modalCategory').innerText = tool.category;
+            document.getElementById('modalYear').innerText = tool.year;
+            document.getElementById('modalInventor').innerText = `👤 ${tool.inventor}`;
+            document.getElementById('modalDescription').innerText = tool.desc;
+            document.getElementById('modalEra').innerText = tool.era;
+            document.getElementById('modalOperation').innerText = tool.operation;
+            document.getElementById('modalSignificance').innerText = tool.significance;
+            
+            const statusElem = document.getElementById('modalStatus');
+            statusElem.innerText = isFirstInspection ? "🎉 Newly Unlocked! (+10 XP)" : "✓ Already Discovered";
+            statusElem.style.color = isFirstInspection ? "var(--accent-cyan)" : "var(--accent-emerald)";
+
+            document.getElementById('inspectorModal').classList.add('active');
+        }
+
+        function closeInspector() {
+            document.getElementById('inspectorModal').classList.remove('active');
+        }
+
+        function closeModalOnBackdrop(event) {
+            if (event.target.id === 'inspectorModal') {
+                closeInspector();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeInspector();
+        });
+
+        function switchAge(index) {
+            const era = erasData[index];
+            const buttons = document.querySelectorAll('.period-tabs .tab-btn');
+            buttons.forEach((btn, i) => btn.classList.toggle('active', i === index));
+
+            const container = document.getElementById('age-content');
+            container.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                    <h3 style="font-size:1.5rem; color:var(--accent-cyan);">${era.title}</h3>
+                    <span class="year-tag" style="font-size:0.9rem;">${era.time}</span>
+                </div>
+                <p style="color:var(--text-muted); font-size:1.05rem; margin-bottom:1.5rem;">${era.summary}</p>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+                    ${era.milestones.map(m => `
+                        <div style="background:var(--pill-bg); padding:1rem; border-radius:10px; border-left:3px solid var(--accent-cyan); border-top:1px solid var(--border-color); border-right:1px solid var(--border-color); border-bottom:1px solid var(--border-color); color:var(--text-main); font-size:0.92rem;">
+                            ${m}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderTools(list) {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = list.map(item => {
+                const isClaimed = inspectedTools.has(item.name);
+                const safeName = item.name.replace(/'/g, "\\'");
+                return `
+                    <div class="tool-card ${isClaimed ? 'claimed' : ''}" onclick="openInspector('${safeName}')">
+                        <div>
+                            <div class="card-top">
+                                <span class="badge-tag" style="font-size:0.75rem; margin-bottom:0;">${item.category}</span>
+                                <span class="year-tag">${item.year}</span>
+                            </div>
+                            <h3>${item.name}</h3>
+                            <div class="inventor-name">👤 ${item.inventor}</div>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="inspect-badge ${isClaimed ? 'claimed' : 'active'}">
+                            ${isClaimed ? '✓ Discovered (Click to Expand)' : '🔍 Click to Expand & Claim XP ✨'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        let activeCategory = 'all';
+        function filterCategory(cat, btn) {
+            activeCategory = cat;
+            document.querySelectorAll('.filter-container .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterTools();
+        }
+
+        function filterTools() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const filtered = toolsDatabase.filter(tool => {
+                const matchesCat = activeCategory === 'all' || tool.category === activeCategory;
+                const matchesQuery = tool.name.toLowerCase().includes(query) || 
+                                     tool.inventor.toLowerCase().includes(query) || 
+                                     tool.year.toLowerCase().includes(query);
+                return matchesCat && matchesQuery;
+            });
+            renderTools(filtered);
+        }
+
+        const morseMap = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--',
+            '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+            '9': '----.', '0': '-----', ' ': '/'
+        };
+
+        function encodeMorse() {
+            const input = document.getElementById('morseInput').value.toUpperCase();
+            const output = input.split('').map(char => morseMap[char] || char).join(' ');
+            document.getElementById('morseOutput').innerText = output || '...';
+        }
+
+        function encodeBinary() {
+            const input = document.getElementById('binaryInput').value;
+            const output = input.split('').map(char => {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
+            }).join(' ');
+            document.getElementById('binaryOutput').innerText = output || '00000000';
+        }
+
+        const quizData = [
+            {
+                q: "Who is celebrated as the world's very first computer programmer?",
+                options: ["Gottfried Leibniz", "Ada Lovelace", "Charles Babbage", "Herman Hollerith"],
+                answer: 1,
+                fact: "Ada Lovelace wrote the world's first program for Babbage's Analytical Engine in 1840 !"
+            },
+            {
+                q: "Which mechanical calculation device only performed addition and subtraction using gears?",
+                options: ["Napier's Bones", "Slide Rule", "Pascaline", "Stepped Reckoner"],
+                answer: 2,
+                fact: "Blaise Pascal's 1642 Pascaline was strictly limited to addition and subtraction ."
+            },
+            {
+                q: "What electronic component characterized the 2nd Generation of computers?",
+                options: ["Vacuum Tubes", "Integrated Circuits", "Microprocessors", "Transistors"],
+                answer: 3,
+                fact: "Transistors replaced bulky, high-heat vacuum tubes during 1959–1963 !"
+            },
+            {
+                q: "Which machine was the first stored-program computer holding both instructions & data in memory?",
+                options: ["EDVAC", "ENIAC", "Harvard Mark I", "Z1"],
+                answer: 0,
+                fact: "EDVAC (1952), designed by John Von Neumann, introduced stored-memory architecture ."
+            },
+            {
+                q: "In what year was zero (0) invented, transforming information processing forever?",
+                options: ["3000 B.C.", "100 A.D.", "875 A.D.", "1613 A.D."],
+                answer: 2,
+                fact: "The number 0 was invented in 875 A.D. during the Premechanical Age !"
+            }
+        ];
+
+        let curQ = 0;
+        let streak = 0;
+
+        function loadQuestion() {
+            const q = quizData[curQ];
+            document.getElementById('quizProgressBar').style.width = `${(curQ / quizData.length) * 100}%`;
+            document.getElementById('questionNum').innerText = `Question ${curQ + 1} of ${quizData.length}`;
+            document.getElementById('quizQuestion').innerText = q.q;
+            document.getElementById('quizFeedback').innerText = '';
+            
+            const optDiv = document.getElementById('quizOptions');
+            optDiv.innerHTML = q.options.map((opt, i) => `
+                <div class="quiz-option" onclick="checkAnswer(${i}, this)">${opt}</div>
+            `).join('');
+        }
+
+        function checkAnswer(selected, element) {
+            const q = quizData[curQ];
+            const allOpts = document.querySelectorAll('.quiz-option');
+            allOpts.forEach(o => o.style.pointerEvents = 'none');
+
+            if (selected === q.answer) {
+                element.classList.add('correct');
+                streak++;
+                awardXP(50);
+                document.getElementById('quizFeedback').innerHTML = `<span style="color:var(--accent-emerald)">✨ Correct! ${q.fact}</span>`;
+            } else {
+                element.classList.add('wrong');
+                allOpts[q.answer].classList.add('correct');
+                streak = 0;
+                document.getElementById('quizFeedback').innerHTML = `<span style="color:var(--accent-pink)">❌ Not quite. ${q.fact}</span>`;
+            }
+
+            document.getElementById('quizStreak').innerText = `Streak: ${streak} 🔥`;
+
+            setTimeout(() => {
+                curQ++;
+                if (curQ < quizData.length) {
+                    loadQuestion();
+                } else {
+                    document.getElementById('quizProgressBar').style.width = `100%`;
+                    document.getElementById('quizContent').innerHTML = `
+                        <div style="text-align:center; padding:1.5rem 0;">
+                            <h2 style="font-size:2rem; color:var(--accent-cyan); margin-bottom:0.8rem;">🎓 Academy Completed!</h2>
+                            <p style="color:var(--text-muted); font-size:1.1rem; margin-bottom:1.5rem;">You earned a total of <strong>${studentXP} XP</strong> mastering the History of Computing!</p>
+                            <button class="btn-action" onclick="resetQuiz()">Restart Challenge 🔄</button>
+                        </div>
+                    `;
+                }
+            }, 2500);
+        }
+
+        function resetQuiz() {
+            curQ = 0;
+            streak = 0;
+            loadQuestion();
+        }
+
+        initTheme();
+        switchAge(0);
+        renderTools(toolsDatabase);
+        loadQuestion();
+        encodeMorse();
+        encodeBinary();
+    </script>
+</body>
+</html>
