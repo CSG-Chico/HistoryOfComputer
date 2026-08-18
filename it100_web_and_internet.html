@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT100: The Web & The Internet - Interactive Learning Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        unp: {
+                            blue: '#1e3a8a',
+                            teal: '#0d9488',
+                            gold: '#d97706',
+                            dark: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.8); }
+        }
+        .pulse-active {
+            animation: pulseGlow 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200 z-50">
+        <div id="courseProgressBar" class="h-full bg-gradient-to-r from-blue-600 via-teal-500 to-amber-500 w-0 transition-all duration-300"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-1.5 z-40 bg-slate-900 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- University / Course Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-600 to-teal-400 flex items-center justify-center font-bold text-xl shadow-md text-white">
+                        <i class="fa-solid font-bold fa-globe"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-blue-400 to-teal-300 bg-clip-text text-transparent">IT100</span>
+                        <span class="text-xs text-slate-400 block font-medium">Living in the IT Era • UNP CCIT</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Tabs -->
+                <nav class="hidden lg:flex space-x-1 text-sm font-medium">
+                    <button onclick="switchTab('overview')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200 active-nav" data-tab="overview">
+                        <i class="fa-solid fa-compass mr-1.5 text-blue-400"></i>Overview
+                    </button>
+                    <button onclick="switchTab('generations')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200" data-tab="generations">
+                        <i class="fa-solid fa-layer-group mr-1.5 text-teal-400"></i>Web 1.0 - 3.0
+                    </button>
+                    <button onclick="switchTab('history')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200" data-tab="history">
+                        <i class="fa-solid fa-timeline mr-1.5 text-amber-400"></i>History
+                    </button>
+                    <button onclick="switchTab('network')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200" data-tab="network">
+                        <i class="fa-solid fa-network-wired mr-1.5 text-indigo-400"></i>Servers & Network
+                    </button>
+                    <button onclick="switchTab('types')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200" data-tab="types">
+                        <i class="fa-solid fa-window-restore mr-1.5 text-rose-400"></i>Website Types
+                    </button>
+                    <button onclick="switchTab('flashcards')" class="nav-btn px-3 py-2 rounded-md hover:bg-slate-800 transition text-slate-200" data-tab="flashcards">
+                        <i class="fa-solid fa-book-bookmark mr-1.5 text-emerald-400"></i>Flashcards
+                    </button>
+                    <button onclick="switchTab('quiz')" class="nav-btn px-3 py-2 rounded-md hover:bg-amber-500 hover:text-slate-900 transition font-semibold bg-amber-500/10 text-amber-400" data-tab="quiz">
+                        <i class="fa-solid fa-circle-question mr-1.5"></i>Quiz & Challenge
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden text-slate-300 hover:text-white p-2 rounded-md">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Nav -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-slate-800 border-t border-slate-700 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('overview'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">Overview</button>
+            <button onclick="switchTab('generations'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">Web 1.0, 2.0, 3.0</button>
+            <button onclick="switchTab('history'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">History & Pioneers</button>
+            <button onclick="switchTab('network'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">Servers & Routing</button>
+            <button onclick="switchTab('types'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">Website Types & Matching</button>
+            <button onclick="switchTab('flashcards'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-slate-200 hover:bg-slate-700">Terminology Flashcards</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-amber-400 font-bold hover:bg-slate-700">Student Quiz</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION 1: OVERVIEW & WEB VS INTERNET -->
+        <section id="tab-overview" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-950 text-white rounded-3xl p-8 md:p-12 shadow-2xl overflow-hidden border border-slate-800">
+                <div class="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-4">
+                        <i class="fa-solid fa-graduation-cap mr-2"></i> College of Communication and Information Technology
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                        The Web & <span class="bg-gradient-to-r from-teal-400 via-sky-300 to-amber-300 bg-clip-text text-transparent">The Internet</span>
+                    </h1>
+                    <p class="mt-4 text-slate-300 text-base sm:text-lg leading-relaxed">
+                        Welcome to your interactive study hub for <strong>IT100: Living in the IT Era</strong>. Explore the core distinctions, historical milestones, network architectures, and web evolutions in an intuitive, hands-on environment.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="switchTab('generations')" class="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold shadow-lg shadow-teal-500/20 transition flex items-center">
+                            Explore Web Generations <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button onclick="switchTab('quiz')" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition flex items-center">
+                            Take Practice Quiz <i class="fa-solid fa-vial ml-2 text-amber-400"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Difference: Web vs. Internet Visual Breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- The Internet Card -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-200 hover:shadow-xl transition group">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Infrastructure Layer</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">The Internet ("Net")</h2>
+                    <p class="text-slate-600 mt-3 text-sm leading-relaxed">
+                        The world's largest computer network. A global connection of billions of computers and device networks linked by data cables, routers, and wireless channels.
+                    </p>
+                    <ul class="mt-6 space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Etymology:</strong> Derived from "Interconnection" and "Network".</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Function:</strong> Hardware highway that carries traffic (email, files, web data, VoIP).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Key Pioneers:</strong> Vinton Gray Cerf & Bob Kahn (TCP/IP co-developers).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The World Wide Web Card -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-200 hover:shadow-xl transition group">
+                    <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl font-bold mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-600">Information Layer</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">World Wide Web (WWW)</h2>
+                    <p class="text-slate-600 mt-3 text-sm leading-relaxed">
+                        A massive collection of interconnected documents, multimedia, and webpages formatted in HTML and accessed through a web browser using HTTP/HTTPS.
+                    </p>
+                    <ul class="mt-6 space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Hypertext Links:</strong> Highlighted keywords/images leading directly to related info.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Function:</strong> Application service that runs <em>on top</em> of the Internet.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span><strong>Inventor:</strong> Sir Tim Berners-Lee (Oxford / MIT Scientist).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Quick Stats & Course Summary Cards -->
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-lg">
+                <h3 class="text-lg font-bold mb-4 text-amber-400 flex items-center">
+                    <i class="fa-solid fa-lightbulb mr-2"></i> Primary Uses of the Internet (IT100 Focus)
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-center">
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-magnifying-glass text-teal-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">Information Search</p>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-envelope text-blue-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">Email & Messaging</p>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-cart-shopping text-amber-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">E-Commerce</p>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-video text-rose-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">Video Conferencing</p>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-users text-indigo-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">Social Networking</p>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-graduation-cap text-emerald-400 text-xl mb-1"></i>
+                        <p class="text-xs font-medium">Online Education</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: WEB GENERATIONS (1.0 vs 2.0 vs 3.0) -->
+        <section id="tab-generations" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">Evolution of the Web</h2>
+                <p class="text-slate-600 mt-2 text-sm">From static read-only portals to dynamic social platforms and intelligent semantic web.</p>
+            </div>
+
+            <!-- Comparison Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Web 1.0 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-slate-500 hover:shadow-xl transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Phase 1</span>
+                        <i class="fa-solid fa-book-open text-slate-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">Web 1.0</h3>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Read-Only Static Web</p>
+                    <p class="text-sm text-slate-600 mt-3">Web pages were mostly static brochures or digital library directories where users could only view and read.</p>
+
+                    <div class="mt-6 space-y-2 text-xs text-slate-700">
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Key Role:</strong> "Information Portal"</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Metric:</strong> Page Views & Directories</div>
+                        <div class="p-2 bg-slate-50 rounded-lg"><strong>Classic Example:</strong> MP3.com, early homepages</div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <p class="text-xs font-bold text-red-500 mb-2">Disadvantages:</p>
+                        <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside">
+                            <li>No comments, likes, or sharing</li>
+                            <li>Company-focused brochures</li>
+                            <li>Lack of web standards</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Web 2.0 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-blue-500 hover:shadow-xl transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Phase 2</span>
+                        <i class="fa-solid fa-comments text-blue-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">Web 2.0</h3>
+                    <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide">Read-Write Interactive Web</p>
+                    <p class="text-sm text-slate-600 mt-3">Emphasizes human collaboration, user-generated content, dynamic applications, and interactive social communities.</p>
+
+                    <div class="mt-6 space-y-2 text-xs text-slate-700">
+                        <div class="p-2 bg-blue-50 rounded-lg"><strong>Key Features:</strong> Folksonomy, Rich UI, User Participation</div>
+                        <div class="p-2 bg-blue-50 rounded-lg"><strong>Business Models:</strong> Long Tail & Usage-based plans</div>
+                        <div class="p-2 bg-blue-50 rounded-lg"><strong>Examples:</strong> FB, Twitter, IG, Blogs, Wikis, Google Docs</div>
+                    </div>
+                </div>
+
+                <!-- Web 3.0 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-teal-500 hover:shadow-xl transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-700">Phase 3</span>
+                        <i class="fa-solid fa-brain text-teal-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">Web 3.0</h3>
+                    <p class="text-xs font-semibold text-teal-600 uppercase tracking-wide">Read-Write Intelligent Web</p>
+                    <p class="text-sm text-slate-600 mt-3">Coined by <strong>John Markoff</strong>. Integrates semantic web technologies, machine learning, NLP, and distributed data.</p>
+
+                    <div class="mt-6 space-y-2 text-xs text-slate-700">
+                        <div class="p-2 bg-teal-50 rounded-lg"><strong>Core Technology:</strong> Semantic Web & AI/ML</div>
+                        <div class="p-2 bg-teal-50 rounded-lg"><strong>Function:</strong> Tailored data sharing & smart agents</div>
+                        <div class="p-2 bg-teal-50 rounded-lg"><strong>Advantage:</strong> Context-aware personalized results</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIVE WEB GENERATION SIMULATOR -->
+            <div class="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white border border-slate-800 shadow-2xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                    <div>
+                        <span class="text-xs font-bold text-teal-400 uppercase tracking-widest"><i class="fa-solid fa-flask mr-1"></i> Interactive Sandbox</span>
+                        <h3 class="text-2xl font-bold">Web Generation Simulator</h3>
+                        <p class="text-slate-400 text-xs mt-1">Switch modes to experience how a web page behaves under Web 1.0, 2.0, and 3.0!</p>
+                    </div>
+                    <!-- Mode Buttons -->
+                    <div class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 self-start sm:self-auto">
+                        <button onclick="setSimMode('1')" id="sim-btn-1" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-700 text-white shadow">Web 1.0</button>
+                        <button onclick="setSimMode('2')" id="sim-btn-2" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">Web 2.0</button>
+                        <button onclick="setSimMode('3')" id="sim-btn-3" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">Web 3.0</button>
+                    </div>
+                </div>
+
+                <!-- Live Playground Display Window -->
+                <div class="mt-6 bg-slate-950 rounded-2xl p-6 border border-slate-800 min-h-[300px] flex flex-col justify-between">
+                    <div id="simDisplayArea" class="space-y-4">
+                        <!-- Dynamic JS Content Injected Here -->
+                    </div>
+                    <div id="simFooterNote" class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500 italic">
+                        <!-- Footer explanation -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: INTERNET HISTORY & PIONEERS -->
+        <section id="tab-history" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">Internet History & Hall of Fame</h2>
+                <p class="text-slate-600 mt-2 text-sm">Chronological development of global networking and key visionaries from the IT100 syllabus.</p>
+            </div>
+
+            <!-- Historical Timeline Roadmap -->
+            <div class="relative border-l-2 border-teal-500/30 ml-4 sm:ml-32 space-y-8 py-4">
+                <!-- 1969 -->
+                <div class="relative group">
+                    <div class="absolute -left-12 sm:-left-36 top-1 text-xs font-black px-3 py-1 bg-teal-500 text-slate-900 rounded-full shadow">
+                        Jan 2, 1969
+                    </div>
+                    <div class="ml-6 bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:border-teal-400 transition">
+                        <h3 class="font-bold text-slate-900 text-lg">ARPA Experiment & ARPANET</h3>
+                        <p class="text-sm text-slate-600 mt-1">The Advanced Research Projects Agency (ARPA) launched packet-switching network experiments, forming the foundation of the modern Internet.</p>
+                    </div>
+                </div>
+
+                <!-- 1982 -->
+                <div class="relative group">
+                    <div class="absolute -left-12 sm:-left-36 top-1 text-xs font-black px-3 py-1 bg-blue-500 text-white rounded-full shadow">
+                        1982
+                    </div>
+                    <div class="ml-6 bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:border-blue-400 transition">
+                        <h3 class="font-bold text-slate-900 text-lg">Coining of the word "Internet"</h3>
+                        <p class="text-sm text-slate-600 mt-1">The term <em>"Internet"</em> officially gained adoption as interconnected networks standardized around TCP/IP protocols.</p>
+                    </div>
+                </div>
+
+                <!-- 1986 -->
+                <div class="relative group">
+                    <div class="absolute -left-12 sm:-left-36 top-1 text-xs font-black px-3 py-1 bg-indigo-500 text-white rounded-full shadow">
+                        1986
+                    </div>
+                    <div class="ml-6 bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:border-indigo-400 transition">
+                        <h3 class="font-bold text-slate-900 text-lg">First "Free Net" Created</h3>
+                        <p class="text-sm text-slate-600 mt-1">Established at Case Western Reserve University, pioneering community-wide free access to digital network resources.</p>
+                    </div>
+                </div>
+
+                <!-- 1991 -->
+                <div class="relative group">
+                    <div class="absolute -left-12 sm:-left-36 top-1 text-xs font-black px-3 py-1 bg-amber-500 text-slate-900 rounded-full shadow">
+                        1991
+                    </div>
+                    <div class="ml-6 bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:border-amber-400 transition">
+                        <h3 class="font-bold text-slate-900 text-lg">Commercial Access Granted</h3>
+                        <p class="text-sm text-slate-600 mt-1">The US Government allowed commercial business agencies and private enterprises to connect to the Internet backbone.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hall of Fame Pioneers -->
+            <div class="mt-12">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <i class="fa-solid fa-award text-amber-500 mr-2"></i> Key Figures Mentioned in Lecture
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Tim Berners-Lee -->
+                    <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-lg border border-slate-700">
+                        <div class="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xl mb-4">
+                            <i class="fa-solid fa-user-astronaut"></i>
+                        </div>
+                        <h4 class="font-extrabold text-lg">Sir Tim Berners-Lee</h4>
+                        <p class="text-xs text-teal-400 font-semibold mb-3">Inventor of the World Wide Web</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            English engineer & computer scientist. Professorial Fellow at Oxford University and professor at MIT. He created HTTP, HTML, URL, and the first web server/browser.
+                        </p>
+                    </div>
+
+                    <!-- Vint Cerf & Bob Kahn -->
+                    <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-lg border border-slate-700">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center font-bold text-xl mb-4">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <h4 class="font-extrabold text-lg">Vinton Gray Cerf & Bob Kahn</h4>
+                        <p class="text-xs text-blue-400 font-semibold mb-3">Fathers of the Internet</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Co-designers of the TCP/IP protocols (Transmission Control Protocol / Internet Protocol) which specify how data packets are routed across connected networks.
+                        </p>
+                    </div>
+
+                    <!-- John Markoff -->
+                    <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-lg border border-slate-700">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xl mb-4">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </div>
+                        <h4 class="font-extrabold text-lg">John Markoff</h4>
+                        <p class="text-xs text-amber-400 font-semibold mb-3">Technology Journalist</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Renowned journalist who suggested and popularized the term <strong>"Web 3.0"</strong> to describe the next generation of intelligent semantic web tools.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SERVERS & NETWORK ARCHITECTURE -->
+        <section id="tab-network" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">Servers & Network Architecture</h2>
+                <p class="text-slate-600 mt-2 text-sm">How hardware components, server types, ISPs, and DNS work together to deliver online information.</p>
+            </div>
+
+            <!-- Server Types Interactive Accordion / Cards -->
+            <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center">
+                    <i class="fa-solid fa-server text-indigo-600 mr-2"></i> Major Types of Servers (IT100 Syllabus)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-blue-600 text-sm block"><i class="fa-solid fa-globe mr-1.5"></i> Web Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Serves requested static or dynamic HTML pages and web assets to browsers.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-teal-600 text-sm block"><i class="fa-solid fa-code mr-1.5"></i> Application Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Provides the business logic and backend application execution routines.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-indigo-600 text-sm block"><i class="fa-solid fa-shield-halved mr-1.5"></i> Proxy Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Acts as an intermediary gateway security shield between client devices and destination servers.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-amber-600 text-sm block"><i class="fa-solid fa-envelope mr-1.5"></i> Mail Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Receives incoming emails and routes outgoing electronic mail across networks.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-emerald-600 text-sm block"><i class="fa-solid fa-folder-tree mr-1.5"></i> File Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Responsible for central storage and management of shared data files.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-rose-600 text-sm block"><i class="fa-solid fa-lock mr-1.5"></i> Policy Server</span>
+                        <p class="text-xs text-slate-600 mt-1">Security component in policy-based networks providing authorization and access facilities.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ISP Classification Banner -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gradient-to-br from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md">
+                    <span class="text-xs font-bold uppercase text-teal-300">Internet Service Provider (ISP)</span>
+                    <h4 class="text-xl font-bold mt-1">National ISP vs. Regional ISP</h4>
+                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        An organization providing services for accessing and participating in the internet.
+                    </p>
+                    <div class="mt-4 space-y-2 text-xs">
+                        <div class="p-2.5 bg-white/10 rounded-lg">
+                            <strong class="text-amber-300">National ISP:</strong> Business providing internet access in cities & towns nationwide (e.g. PLDT, Converge, Sky Cable).
+                        </div>
+                        <div class="p-2.5 bg-white/10 rounded-lg">
+                            <strong class="text-teal-300">Regional ISP:</strong> Provides internet access to a specific local geographic area.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md">
+                    <span class="text-xs font-bold uppercase text-amber-300">Addressing & Lookup</span>
+                    <h4 class="text-xl font-bold mt-1">DNS & IP Address</h4>
+                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        Devices communicate using numerical IP addresses, while human users rely on memorable Domain Names.
+                    </p>
+                    <div class="mt-4 space-y-2 text-xs">
+                        <div class="p-2.5 bg-white/10 rounded-lg">
+                            <strong class="text-sky-300">IP Address:</strong> Numerical label assigned to each device for identity (e.g. 192.168.1.1).
+                        </div>
+                        <div class="p-2.5 bg-white/10 rounded-lg">
+                            <strong class="text-emerald-300">Domain Name System (DNS):</strong> The <em>"Phonebook of the Internet"</em> translating names (.edu, .com, .gov, .ph) to numerical IPs.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERACTIVE PACKET ROUTING SIMULATOR -->
+            <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fa-solid fa-route text-teal-400 mr-2"></i> Interactive Packet Request Simulator
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Click step-by-step to see how your browser retrieves a page like www.unp.edu.ph!</p>
+                    </div>
+                    <button onclick="startPacketSim()" class="px-5 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-900 text-xs font-bold rounded-xl shadow transition">
+                        <i class="fa-solid fa-play mr-1.5"></i> Run Route Simulation
+                    </button>
+                </div>
+
+                <!-- Step Diagram Nodes -->
+                <div class="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+                    <div id="node-1" class="packet-node p-4 rounded-xl bg-slate-800 border border-slate-700 transition">
+                        <i class="fa-solid fa-laptop text-2xl text-blue-400 mb-2"></i>
+                        <p class="text-xs font-bold">1. Client Browser</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Requests Webpage</span>
+                    </div>
+
+                    <div id="node-2" class="packet-node p-4 rounded-xl bg-slate-800 border border-slate-700 transition">
+                        <i class="fa-solid fa-wifi text-2xl text-indigo-400 mb-2"></i>
+                        <p class="text-xs font-bold">2. Router / Modem</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Network Traffic Cop</span>
+                    </div>
+
+                    <div id="node-3" class="packet-node p-4 rounded-xl bg-slate-800 border border-slate-700 transition">
+                        <i class="fa-solid fa-tower-cell text-2xl text-amber-400 mb-2"></i>
+                        <p class="text-xs font-bold">3. ISP & DNS</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Lookup IP Address</span>
+                    </div>
+
+                    <div id="node-4" class="packet-node p-4 rounded-xl bg-slate-800 border border-slate-700 transition">
+                        <i class="fa-solid fa-shield-halved text-2xl text-rose-400 mb-2"></i>
+                        <p class="text-xs font-bold">4. Proxy Gateway</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Security Inspection</span>
+                    </div>
+
+                    <div id="node-5" class="packet-node p-4 rounded-xl bg-slate-800 border border-slate-700 transition">
+                        <i class="fa-solid fa-server text-2xl text-emerald-400 mb-2"></i>
+                        <p class="text-xs font-bold">5. Web Server</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Sends Back HTML</span>
+                    </div>
+                </div>
+
+                <!-- Status Console Log -->
+                <div class="mt-6 bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono">
+                    <span class="text-slate-500 block mb-1">// Route Console Log</span>
+                    <p id="packetSimLog" class="text-teal-300">Ready. Click "Run Route Simulation" to inspect packet travel.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: WEBSITE TYPES & MATCHING GAME -->
+        <section id="tab-types" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">Types of Websites</h2>
+                <p class="text-slate-600 mt-2 text-sm">Review the primary website categories from IT100 and test your classification skills.</p>
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-cart-shopping text-blue-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">eCommerce</h4>
+                    <p class="text-xs text-slate-500 mt-1">Shopping carts & online payment systems to buy/sell directly.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-briefcase text-teal-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Business Websites</h4>
+                    <p class="text-xs text-slate-500 mt-1">Represents a company to communicate products and services.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-film text-indigo-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Entertainment</h4>
+                    <p class="text-xs text-slate-500 mt-1">Videos, streaming, music, gaming, and leisure content.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-newspaper text-amber-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Media Websites</h4>
+                    <p class="text-xs text-slate-500 mt-1">News reporting, journalism stories, and editorial publishing.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-user-gear text-emerald-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Portfolio</h4>
+                    <p class="text-xs text-slate-500 mt-1">Collects work samples to showcase past work & skills.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-book-open-reader text-rose-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Brochure Websites</h4>
+                    <p class="text-xs text-slate-500 mt-1">Simplified business site providing basic contact & service overview.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-graduation-cap text-sky-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Educational</h4>
+                    <p class="text-xs text-slate-500 mt-1">Offered by academic institutions or online learning portals.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <i class="fa-solid fa-comments text-purple-500 text-xl mb-2"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Wiki / Forum</h4>
+                    <p class="text-xs text-slate-500 mt-1">Collaborative spaces where users directly make edits or tweaks.</p>
+                </div>
+            </div>
+
+            <!-- INTERACTIVE CLASSIFICATION MATCHING GAME -->
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Mini-Game Challenge</span>
+                        <h3 class="text-2xl font-extrabold">Website Classifier Practice</h3>
+                    </div>
+                    <div class="bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 text-xs">
+                        Score: <span id="gameScore" class="font-bold text-teal-400">0</span> / 5
+                    </div>
+                </div>
+
+                <div id="classifierGameArea" class="mt-6 space-y-6">
+                    <!-- Dynamic Question Card -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: TERMINOLOGY & FLASHCARDS -->
+        <section id="tab-flashcards" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">IT100 Terminology Deck</h2>
+                <p class="text-slate-600 mt-2 text-sm">Click cards to flip and study key terms, definitions, and technical specs.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2">
+                <button onclick="filterCards('all')" class="card-filter-btn active-filter px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white">All Terms</button>
+                <button onclick="filterCards('protocols')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Protocols & Web</button>
+                <button onclick="filterCards('data')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Data & Storage</button>
+                <button onclick="filterCards('security')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Security & Software</button>
+            </div>
+
+            <!-- Flashcards Grid -->
+            <div id="flashcardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- SECTION 7: STUDENT PRACTICE QUIZ -->
+        <section id="tab-quiz" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-200 max-w-3xl mx-auto">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-6 mb-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">IT100 Assessment</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Comprehensive Course Quiz</h2>
+                        <p class="text-xs text-slate-500 mt-1">10 questions direct from the UNP CCIT lecture material.</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="quizProgressText" class="text-xs font-bold text-slate-400 block">Question 1/10</span>
+                        <div class="w-24 bg-slate-100 rounded-full h-2 mt-1">
+                            <div id="quizBar" class="bg-amber-500 h-2 rounded-full w-1/10 transition-all"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Container -->
+                <div id="quizContainer">
+                    <!-- Dynamic Question Area -->
+                </div>
+
+                <!-- Result Score Modal / Area -->
+                <div id="quizResultArea" class="hidden text-center py-8 space-y-6">
+                    <div id="scoreBadge" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-900 flex items-center justify-center font-extrabold text-3xl shadow-xl">
+                        0/10
+                    </div>
+                    <div>
+                        <h3 id="resultTitle" class="text-2xl font-bold text-slate-900">Quiz Completed!</h3>
+                        <p id="resultSubtitle" class="text-sm text-slate-600 mt-2">Here is your performance breakdown.</p>
+                    </div>
+                    <button onclick="resetQuiz()" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Retake Practice Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-semibold text-slate-300">IT100 – Living in the IT Era • Interactive Student Portal</p>
+            <p>College of Communication and Information Technology • University of Northern Philippines</p>
+            <p class="text-slate-500">Designed for enhanced interactive learning based on course slides.</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic Script -->
+    <script>
+        // --- 1. Tab Navigation Logic ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected tab
+            const target = document.getElementById('tab-' + tabId);
+            if(target) target.classList.remove('hidden');
+
+            // Update nav button active states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('bg-slate-800', 'text-white', 'font-bold');
+                } else {
+                    btn.classList.remove('bg-slate-800', 'text-white', 'font-bold');
+                }
+            });
+
+            // Update Top Progress Bar
+            const tabProgress = {
+                'overview': 15,
+                'generations': 30,
+                'history': 50,
+                'network': 65,
+                'types': 80,
+                'flashcards': 90,
+                'quiz': 100
+            };
+            document.getElementById('courseProgressBar').style.width = (tabProgress[tabId] || 15) + '%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+
+        // --- 2. Web Generation Simulator Logic ---
+        const simData = {
+            '1': {
+                title: 'Web 1.0 (Static Read-Only Web)',
+                badge: 'Read-Only Portal',
+                badgeColor: 'bg-slate-800 text-slate-300',
+                html: `
+                    <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                            <span class="font-bold text-amber-400">Directory Portal: MP3.com (1998)</span>
+                            <span class="text-[10px] text-slate-500">Page Views: 1,420,890</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2">Welcome to Music Portal</h4>
+                        <p class="mb-3">This is a static digital catalog listing classical audio files. Users can view links and read artist bios.</p>
+                        <div class="space-y-1 text-teal-400 underline text-[11px]">
+                            <a href="#" onclick="return false;">> Browse Classical Music Directory</a><br>
+                            <a href="#" onclick="return false;">> View Company Info & Static Brochure</a>
+                        </div>
+                    </div>
+                `,
+                footer: 'Characteristics: Read-only, no user comments or likes, static HTML, portals & directories.'
+            },
+            '2': {
+                title: 'Web 2.0 (Dynamic Read-Write Web)',
+                badge: 'Read-Write Interactive',
+                badgeColor: 'bg-blue-900 text-blue-200',
+                html: `
+                    <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 text-xs space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-blue-400"><i class="fa-solid fa-users mr-1"></i> Social Community Post</span>
+                            <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">User-Generated</span>
+                        </div>
+                        <p class="text-slate-200">"Just uploaded my new project code! What do you guys think?"</p>
+                        
+                        <!-- Folksonomy Tagging -->
+                        <div class="flex gap-1.5">
+                            <span class="text-[10px] bg-slate-800 text-teal-300 px-2 py-0.5 rounded">#Folksonomy</span>
+                            <span class="text-[10px] bg-slate-800 text-amber-300 px-2 py-0.5 rounded">#Collaboration</span>
+                        </div>
+
+                        <!-- Interactive Like & Comment -->
+                        <div class="pt-2 border-t border-slate-800 flex items-center gap-4 text-slate-400">
+                            <button onclick="toggleSimLike(this)" class="hover:text-rose-400 transition flex items-center gap-1">
+                                <i class="fa-regular fa-heart"></i> <span id="likeCount">24</span> Likes
+                            </button>
+                            <span class="text-slate-600">|</span>
+                            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
+                        </div>
+                    </div>
+                `,
+                footer: 'Characteristics: User participation, read-write, folksonomy (tagging), usage-based services, social networking.'
+            },
+            '3': {
+                title: 'Web 3.0 (Read-Write Intelligent Web)',
+                badge: 'Semantic & AI Intelligent',
+                badgeColor: 'bg-teal-900 text-teal-200',
+                html: `
+                    <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 text-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-teal-400 flex items-center">
+                                <i class="fa-solid fa-brain mr-1.5 text-amber-400"></i> Autonomous Semantic Agent
+                            </span>
+                            <span class="text-[10px] bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded">Machine Learning</span>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-300">
+                            <p class="text-teal-300 font-semibold mb-1"><i class="fa-solid fa-wand-magic-sparkles"></i> Contextual Recommendation:</p>
+                            <p class="text-[11px] text-slate-400">Based on your learning history in IT100, I have organized a personalized summary of <strong>Semantic Web & Distributed Databases</strong> for your upcoming exam.</p>
+                        </div>
+                    </div>
+                `,
+                footer: 'Coined by John Markoff: Semantic web technology, natural language processing (NLP), machine reasoning, autonomous agents.'
+            }
+        };
+
+        function setSimMode(mode) {
+            // Update button styles
+            ['1', '2', '3'].forEach(m => {
+                const btn = document.getElementById('sim-btn-' + m);
+                if(m === mode) {
+                    btn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-teal-500 text-slate-900 shadow';
+                } else {
+                    btn.className = 'px-4 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white';
+                }
+            });
+
+            // Update display
+            const data = simData[mode];
+            document.getElementById('simDisplayArea').innerHTML = `
+                <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-bold text-white">${data.title}</h4>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${data.badgeColor}">${data.badge}</span>
+                </div>
+                ${data.html}
+            `;
+            document.getElementById('simFooterNote').innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> ${data.footer}`;
+        }
+
+        function toggleSimLike(btn) {
+            const countSpan = document.getElementById('likeCount');
+            let current = parseInt(countSpan.innerText);
+            countSpan.innerText = current + 1;
+            btn.classList.add('text-rose-400');
+        }
+
+
+        // --- 3. Packet Routing Simulator Logic ---
+        function startPacketSim() {
+            const steps = [
+                { node: 'node-1', log: '1. Client Browser creates HTTP/HTTPS request for www.unp.edu.ph.' },
+                { node: 'node-2', log: '2. Request hits Home Router / Modem (Traffic Cop managing data signals).' },
+                { node: 'node-3', log: '3. ISP (e.g., PLDT/Converge) routes to DNS (Phonebook) to translate domain to numerical IP address.' },
+                { node: 'node-4', log: '4. Packet passes Proxy Server intermediary for security inspection & policy authorization.' },
+                { node: 'node-5', log: '5. Destination Web Server receives request and sends requested HTML files back to Browser!' }
+            ];
+
+            let stepIdx = 0;
+            const logEl = document.getElementById('packetSimLog');
+
+            // Reset all nodes
+            document.querySelectorAll('.packet-node').forEach(n => {
+                n.classList.remove('bg-teal-500/20', 'border-teal-400', 'pulse-active');
+            });
+
+            const interval = setInterval(() => {
+                if(stepIdx > 0) {
+                    const prevNode = document.getElementById(steps[stepIdx - 1].node);
+                    prevNode.classList.remove('pulse-active');
+                }
+
+                if(stepIdx < steps.length) {
+                    const currNode = document.getElementById(steps[stepIdx].node);
+                    currNode.classList.add('bg-teal-500/20', 'border-teal-400', 'pulse-active');
+                    logEl.innerText = steps[stepIdx].log;
+                    stepIdx++;
+                } else {
+                    clearInterval(interval);
+                    logEl.innerText = '✅ Transmission Complete! HTML Web Page rendered successfully in Browser.';
+                }
+            }, 1200);
+        }
+
+
+        // --- 4. Website Classifier Game Data & Logic ---
+        const gameQuestions = [
+            {
+                scenario: "A website like Shopee or Lazada with a shopping cart, item listings, and credit card / GCash checkout system.",
+                answer: "eCommerce",
+                options: ["eCommerce", "Brochure Website", "Media Website", "Wiki"]
+            },
+            {
+                scenario: "Wikipedia, where online users from around the world collaboratively edit, write, and refine article entries.",
+                answer: "Wiki / Community Forum",
+                options: ["Educational Website", "Wiki / Community Forum", "Portfolio", "Business Website"]
+            },
+            {
+                scenario: "A graphic designer's online gallery showcasing past project samples, logos, and creative artworks to potential clients.",
+                answer: "Portfolio Website",
+                options: ["Portfolio Website", "eCommerce", "Brochure Website", "Media Website"]
+            },
+            {
+                scenario: "A simplified online web presence for a local bakery displaying only their contact address, operating hours, and basic menu.",
+                answer: "Brochure Website",
+                options: ["Brochure Website", "eCommerce", "Application Server", "Entertainment Website"]
+            },
+            {
+                scenario: "The official University of Northern Philippines (UNP) online portal offering course syllabi and student registration.",
+                answer: "Educational Website",
+                options: ["Educational Website", "Brochure Website", "Entertainment Website", "Social Network"]
+            }
+        ];
+
+        let currentGameIdx = 0;
+        let gameScore = 0;
+
+        function loadGameQuestion() {
+            if(currentGameIdx >= gameQuestions.length) {
+                document.getElementById('classifierGameArea').innerHTML = `
+                    <div class="text-center py-6">
+                        <i class="fa-solid fa-trophy text-4xl text-amber-400 mb-3"></i>
+                        <h4 class="text-xl font-bold">Game Finished!</h4>
+                        <p class="text-xs text-slate-300 mt-1">You correctly classified ${gameScore} out of 5 website types.</p>
+                        <button onclick="restartGame()" class="mt-4 px-4 py-2 bg-teal-500 text-slate-900 font-bold rounded-xl text-xs">Play Again</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = gameQuestions[currentGameIdx];
+            document.getElementById('classifierGameArea').innerHTML = `
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Scenario #${currentGameIdx + 1}</span>
+                    <p class="text-sm font-medium text-slate-200">"${q.scenario}"</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${q.options.map(opt => `
+                        <button onclick="checkGameAnswer('${opt}')" class="p-3 text-left bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold border border-slate-700 text-slate-200 transition">
+                            <i class="fa-regular fa-circle-check mr-2 text-teal-400"></i> ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function checkGameAnswer(selected) {
+            if(selected === gameQuestions[currentGameIdx].answer) {
+                gameScore++;
+                document.getElementById('gameScore').innerText = gameScore;
+            }
+            currentGameIdx++;
+            loadGameQuestion();
+        }
+
+        function restartGame() {
+            currentGameIdx = 0;
+            gameScore = 0;
+            document.getElementById('gameScore').innerText = '0';
+            loadGameQuestion();
+        }
+
+
+        // --- 5. Terminology Flashcards Data & Logic ---
+        const flashcardData = [
+            { cat: 'data', term: 'Bit', def: 'A single digit in the binary numbering system (Base 2), representing either a 1 or a 0.' },
+            { cat: 'data', term: 'Byte', def: 'Generally consists of eight (8) bits grouped together.' },
+            { cat: 'protocols', term: 'HTML', def: 'Hypertext Markup Language: Coding language telling a browser how to structure text, multimedia, and links.' },
+            { cat: 'protocols', term: 'URL', def: 'Uniform Resource Locator: A global web address used to locate remote resources on the World Wide Web.' },
+            { cat: 'protocols', term: 'HTTP vs HTTPS', def: 'HTTP is standard data protocol. HTTPS adds a special layer of Encryption to hide personal passwords & data.' },
+            { cat: 'security', term: 'Encryption', def: 'Mathematical scrambling of data into meaningless gobbledygook so eavesdroppers cannot read it.' },
+            { cat: 'security', term: 'Web Bot', def: 'Automated software program/macro running repetitive functions like multi-group posting or search indexing.' },
+            { cat: 'protocols', term: 'Folksonomy', def: 'Web 2.0 feature allowing users to categorize and arrange information using freely chosen keywords (#tagging).' },
+            { cat: 'data', term: 'Upload vs Download', def: 'Upload transfers data FROM your computer to another. Download transfers data FROM another computer to yours.' }
+        ];
+
+        function renderFlashcards(filter = 'all') {
+            const grid = document.getElementById('flashcardsGrid');
+            const filtered = filter === 'all' ? flashcardData : flashcardData.filter(item => item.cat === filter);
+
+            grid.innerHTML = filtered.map(card => `
+                <div class="flip-card h-48 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner relative w-full h-full rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="flip-card-front absolute inset-0 bg-white rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full">${card.cat}</span>
+                            <h4 class="text-xl font-bold text-slate-900">${card.term}</h4>
+                            <span class="text-[10px] text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> Click to flip definition</span>
+                        </div>
+                        <!-- Back -->
+                        <div class="flip-card-back absolute inset-0 bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-center text-center border border-slate-800">
+                            <p class="text-xs text-slate-300 leading-relaxed">${card.def}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCards(cat) {
+            document.querySelectorAll('.card-filter-btn').forEach(b => {
+                b.className = 'card-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300';
+            });
+            event.target.className = 'card-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white';
+            renderFlashcards(cat);
+        }
+
+
+        // --- 6. Comprehensive Student Quiz Engine ---
+        const quizQuestions = [
+            {
+                q: "Who is known as the inventor of the World Wide Web?",
+                options: ["Vinton Gray Cerf", "Bob Kahn", "Tim Berners-Lee", "John Markoff"],
+                ans: 2,
+                exp: "Sir Tim Berners-Lee invented the World Wide Web in 1989."
+            },
+            {
+                q: "What is the primary characteristic of Web 1.0?",
+                options: ["User-generated video streaming", "Read-only static web pages acting like brochures", "Semantic AI bots", "Social media networking"],
+                ans: 1,
+                exp: "Web 1.0 was mostly read-only where users viewed static HTML information portals."
+            },
+            {
+                q: "Which term describes allowing users to categorize information using freely chosen keywords (#tagging)?",
+                options: ["Semantic Web", "Folksonomy", "Long Tail", "Encryption"],
+                ans: 1,
+                exp: "Folksonomy is a Web 2.0 feature enabling folk taxonomy through user tagging."
+            },
+            {
+                q: "Who suggested and popularized the name 'Web 3.0'?",
+                options: ["John Markoff", "Tim Berners-Lee", "Bob Kahn", "Vinton Gray Cerf"],
+                ans: 0,
+                exp: "Technology journalist John Markoff suggested the term Web 3.0."
+            },
+            {
+                q: "On what date did the ARPA experiment launch, leading to ARPANET?",
+                options: ["January 2, 1969", "August 15, 1982", "December 1, 1991", "March 4, 1986"],
+                ans: 0,
+                exp: "The ARPA experiment started on January 2, 1969."
+            },
+            {
+                q: "Which server type provides the business logic for application programs?",
+                options: ["Web Server", "Proxy Server", "Application Server", "File Server"],
+                ans: 2,
+                exp: "Application Servers handle the backend business logic."
+            },
+            {
+                q: "What is referred to as the 'Phonebook of the Internet'?",
+                options: ["Domain Name System (DNS)", "IP Address", "Router", "HTML"],
+                ans: 0,
+                exp: "DNS acts as the phonebook translating domain names into numerical IP addresses."
+            },
+            {
+                q: "How many bits make up a standard Byte?",
+                options: ["2 bits", "4 bits", "8 bits", "16 bits"],
+                ans: 2,
+                exp: "A Byte generally consists of 8 bits."
+            },
+            {
+                q: "What makes HTTPS different from HTTP?",
+                options: ["HTTPS is faster", "HTTPS adds a special layer of Encryption", "HTTPS only works on Web 1.0", "HTTPS does not require DNS"],
+                ans: 1,
+                exp: "HTTPS (Hypertext Transfer Protocol Secure) adds encryption to scramble sensitive data."
+            },
+            {
+                q: "What type of ISP business provides internet access across cities and towns nationwide?",
+                options: ["Regional ISP", "National ISP", "Local ISP", "Proxy ISP"],
+                ans: 1,
+                exp: "National ISPs operate nationwide, whereas Regional ISPs focus on specific geographic areas."
+            }
+        ];
+
+        let currentQuizQ = 0;
+        let quizScore = 0;
+
+        function loadQuizQuestion() {
+            const container = document.getElementById('quizContainer');
+            document.getElementById('quizProgressText').innerText = `Question ${currentQuizQ + 1}/10`;
+            document.getElementById('quizBar').style.width = `${((currentQuizQ + 1) / 10) * 100}%`;
+
+            const q = quizQuestions[currentQuizQ];
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900">${currentQuizQ + 1}. ${q.q}</h3>
+                    <div class="space-y-2">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="submitQuizOption(${idx})" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition flex items-center justify-between group">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-slate-300 group-hover:text-amber-500"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitQuizOption(selectedIdx) {
+            const q = quizQuestions[currentQuizQ];
+            if(selectedIdx === q.ans) {
+                quizScore++;
+            }
+
+            currentQuizQ++;
+            if(currentQuizQ < quizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            const resultArea = document.getElementById('quizResultArea');
+            resultArea.classList.remove('hidden');
+
+            document.getElementById('scoreBadge').innerText = `${quizScore}/10`;
+            if(quizScore >= 8) {
+                document.getElementById('resultTitle').innerText = '🎉 Excellent Mastery!';
+                document.getElementById('resultSubtitle').innerText = 'You demonstrated strong knowledge of IT100 Web & Internet concepts.';
+            } else {
+                document.getElementById('resultTitle').innerText = '👍 Good Effort!';
+                document.getElementById('resultSubtitle').innerText = 'Review the flashcards and modules to improve your score.';
+            }
+        }
+
+        function resetQuiz() {
+            currentQuizQ = 0;
+            quizScore = 0;
+            document.getElementById('quizResultArea').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+
+        // --- Initialize Page On Load ---
+        window.onload = function() {
+            setSimMode('1');
+            loadGameQuestion();
+            renderFlashcards('all');
+            loadQuizQuestion();
+        };
+    </script>
+</body>
+</html>
